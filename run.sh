@@ -23,7 +23,8 @@ run_name="e${num_epoch}_gemma_7b_qvko_r${lora_r}_a${lora_alpha}_lr${learning_rat
 work_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "dir: ${work_dir}"
 
-# below, parameters --fp16 and --tf32 False might be changed, this is what worked to me, due to my GPUs not being Ampere but turing 
+# below, parameters --fp16 True and --tf32 False might be changed, this is what worked to me, due to my GPUs not being Ampere but Turing
+# Alternatively, if your GPUs are Ampere, you might set those params as follows: change --fp16 True by --fp32 True and --tf32 False by --tf32 True  
 
 torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
     --model_name_or_path "google/gemma-7b" \
