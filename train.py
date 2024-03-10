@@ -23,6 +23,8 @@ import transformers  # Hugging Face's library for NLP models and utilities.
 from utils import jload  # Custom function to load JSON files.
 from torch.utils.data import Dataset  # Base class for representing a dataset in PyTorch.
 from transformers import Trainer, BitsAndBytesConfig  # Classes for model training and 8-bit optimization configuration.
+from pathlib import Path # Object-oriented interface to file system paths.
+from transformers import PreTrainedTokenizer, PreTrainedModel  # Base classes for tokenizers and models.
 
 
 # Constant representing the value to ignore when calculating the loss function.
@@ -366,6 +368,45 @@ def make_supervised_data_module(tokenizer: transformers.PreTrainedTokenizer, dat
     )
 
 
+def load_checkpoint(
+    checkpoint_path: str,
+    model: PreTrainedModel
+) -> Optional[PreTrainedModel]:
+    """
+    Load the model checkpoint from a specified path. This function handles both traditional
+    PyTorch .bin files and Huggingface SafeTensors.
+
+    Args:
+        checkpoint_path (str): Path to the directory containing checkpoint files.
+        model (PreTrainedModel): The model to which the checkpoint should be loaded.
+        use_safetensors (bool): Flag indicating whether to load from SafeTensors. If False, will load from .bin.
+
+    Returns:
+        Optional[PreTrainedModel]: The model with loaded weights if successful, None otherwise.
+    """
+    # Construct the filenames for bin and safetensors files.
+    bin_checkpoint = os.path.join(checkpoint_path, "pytorch_model.bin")
+    safetensors_checkpoint = os.path.join(checkpoint_path, "adapter_model.safetensors")
+
+    # Determine which file to load based on the use_safetensors flag and file existence.
+    checkpoint_to_load = safetensors_checkpoint if os.path.exists(safetensors_checkpoint) else bin_checkpoint
+    
+    if os.path.exists(checkpoint_to_load):
+        # Load the weights from the file into a state dictionary.
+        state_dict = torch.load(checkpoint_to_load)
+        
+        # Set the model's state dictionary to the loaded state dictionary, using set_peft_model_state_dict to handle PEFT models.
+        set_peft_model_state_dict(model, state_dict)
+        
+        print(f"Checkpoint loaded from {checkpoint_to_load}")
+        return model
+    else:
+        #If no checkpoint is found, return None and print a message
+        print(f"No checkpoint found at {checkpoint_to_load}")
+        print("Returning the original model and training from scratch.")
+        return None
+
+
 def train():
     # Parse command-line arguments related to model, data, and training configurations.
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
@@ -450,24 +491,15 @@ def train():
 
     # Attempt to resume training from a checkpoint if specified.
     if training_args.resume_from_checkpoint:
-        # Check the available weights and load them
-        checkpoint_name = os.path.join(
-            training_args.resume_from_checkpoint, "pytorch_model.bin"
-        )  # Full checkpoint
-        if not os.path.exists(checkpoint_name) and other_args.use_lora:
-            checkpoint_name = os.path.join(
-                training_args.resume_from_checkpoint, "adapter_model.bin"
-            )  # only LoRA model - LoRA config above has to fit
-            training_args.resume_from_checkpoint = (
-                False  # So the trainer won't try loading its state
-            )
-        # The two files above have a different name depending on how they were saved, but are actually the same.
-        if os.path.exists(checkpoint_name):
-            print(f"Restarting from {checkpoint_name}")
-            adapters_weights = torch.load(checkpoint_name)
-            set_peft_model_state_dict(model, adapters_weights)
+        # Call the function with the appropriate arguments
+        checkpoint_dir = training_args.resume_from_checkpoint
+        loaded_model = load_checkpoint(checkpoint_dir, model)
+        
+        # Check if the model was loaded successfully
+        if loaded_model is not None:
+            model = loaded_model
         else:
-            print(f"Checkpoint {checkpoint_name} not found")
+            print("Failed to load the checkpoint.")
 
     # Prepare datasets and the data collator.
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
