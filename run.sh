@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5" # Change it to the GPU you want to use
+export CUDA_VISIBLE_DEVICES="0" # Change it to the GPU you want to use (if multiple, add all their IDs)
 export WANDB_PROJECT="LLM-ORCAMATH-FINETUNING"
 
 master_port=`shuf -i 12000-30000 -n 1`
@@ -10,7 +10,7 @@ lora_alpha=$(( lora_r * 2 ))
 learning_rate="5e-5"
 num_epoch=10
 batch_size=8 # Decrease it if you run out of memory in CUDA (original: 16)
-world_size=6 # Change it to the number of GPUs
+world_size=1 # Change it to the number of GPUs
 
 total_batch_size=128
 gradient_accumulation_steps=$(( total_batch_size / world_size / batch_size))
