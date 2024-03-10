@@ -9,7 +9,7 @@ lora_r=8
 lora_alpha=$(( lora_r * 2 ))
 learning_rate="5e-5"
 num_epoch=10
-batch_size=8 # Decrease it if you run out of memory in CUDA (original: 16)
+batch_size=16 # Decrease it if you run out of memory in CUDA (original: 16)
 world_size=1 # Change it to the number of GPUs
 
 total_batch_size=128
@@ -22,6 +22,8 @@ run_name="e${num_epoch}_gemma_7b_qvko_r${lora_r}_a${lora_alpha}_lr${learning_rat
 
 work_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "dir: ${work_dir}"
+
+# below, parameters --fp16 and --tf32 False might be changed, this is what worked to me, due to my GPUs not being Ampere but turing 
 
 torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
     --model_name_or_path "google/gemma-7b" \
