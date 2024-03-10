@@ -12,7 +12,7 @@ num_epoch=10
 batch_size=16 # Decrease it if you run out of memory in CUDA (original: 16)
 world_size=1 # Change it to the number of GPUs
 
-total_batch_size=128
+total_batch_size=128 #Decrease it if you run out of memory in CUDA (original: 128)
 gradient_accumulation_steps=$(( total_batch_size / world_size / batch_size))
 total_batch_size=$(( gradient_accumulation_steps * world_size * batch_size ))
 
