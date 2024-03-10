@@ -1,0 +1,1 @@
+Finetuning Gemma-7b with Microsoft's OrcaMath dataset. Dataset in json format can be found in the following link: [orcamath_data](https://drive.google.com/file/d/1JHDUPlG5igZ1QZ0McNYmUKzixV9pJXIZ/view?usp=sharing)
