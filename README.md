@@ -1,4 +1,4 @@
-# LLM Easy Finetuning with OrcaMath
+# Gemma7b Easy Finetuning with OrcaMath dataset
 
 ## Introduction
 This project aims to simplify the finetuning process of large language models, specifically Llama-2 & Gemma-7b, using the OrcaMath dataset. The focus is on enhancing model performance for mathematical reasoning tasks.
@@ -12,11 +12,11 @@ This project aims to simplify the finetuning process of large language models, s
 ## Installation
 Clone this repository:
 
-`git clone https://github.com/Neilus03/LLM_EASY_FINETUNING.git`
+`git clone https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING.git`
 
 Install dependencies:
 ```bash
-cd LLM_EASY_FINETUNING pip install -r requirements.txt
+cd GEMMA_ORCAMATH_FINETUNING pip install -r requirements.txt
 ````
 
 ## Dataset
