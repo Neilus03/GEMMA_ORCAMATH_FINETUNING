@@ -1,0 +1,48 @@
+#!/bin/bash
+
+export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5" # Change it to the GPU you want to use
+export WANDB_PROJECT="LLM-ORCAMATH-FINETUNING"
+
+master_port=`shuf -i 12000-30000 -n 1`
+
+lora_r=8
+lora_alpha=$(( lora_r * 2 ))
+learning_rate="5e-5"
+num_epoch=10
+batch_size=8 # Decrease it if you run out of memory in CUDA (original: 16)
+world_size=6 # Change it to the number of GPUs
+
+total_batch_size=128
+gradient_accumulation_steps=$(( total_batch_size / world_size / batch_size))
+total_batch_size=$(( gradient_accumulation_steps * world_size * batch_size ))
+
+run_name="e${num_epoch}_gemma_7b_qvko_r${lora_r}_a${lora_alpha}_lr${learning_rate}_bs${total_batch_size}"
+#run_name="e${num_epoch}_Llama_7b_qvko_r${lora_r}_a${lora_alpha}_lr${learning_rate}_bs${total_batch_size}"
+
+
+work_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "dir: ${work_dir}"
+
+torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
+    --model_name_or_path "google/gemma-7b" \
+    --data_path ./data/formatted_orcamath.json \
+    --output_dir ${work_dir}/${run_name}/ \
+    --run_name  ${run_name} \
+    --fp16 True \
+    --num_train_epochs ${num_epoch} \
+    --per_device_train_batch_size ${batch_size} \
+    --gradient_accumulation_steps ${gradient_accumulation_steps} \
+    --warmup_steps 300 \
+    --save_strategy "epoch" \
+    --lr_scheduler_type "constant_with_warmup" \
+    --save_total_limit 10 \
+    --learning_rate ${learning_rate} \
+    --model_max_length 512 \
+    --logging_steps 8 \
+    --tf32 False \
+    --ddp_find_unused_parameters False \
+    --use_lora True \
+    --load_in_4bit True \
+    --lora_r ${lora_r} \
+    --lora_alpha ${lora_alpha} \
+    --lora_target_modules q_proj v_proj k_proj o_proj
