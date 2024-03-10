@@ -11,11 +11,13 @@ This project aims to simplify the finetuning process of large language models, s
 
 ## Installation
 Clone this repository:
+
 `git clone https://github.com/Neilus03/LLM_EASY_FINETUNING.git`
 
 Install dependencies:
-`cd LLM_EASY_FINETUNING`
-`pip install -r requirements.txt`
+```bash
+cd LLM_EASY_FINETUNING pip install -r requirements.txt
+````
 
 ## Dataset
 The OrcaMath dataset is stored on Google Drive due to its size. Download it from [orcamath_data](https://drive.google.com/file/d/1JHDUPlG5igZ1QZ0McNYmUKzixV9pJXIZ/view?usp=sharing) and place it in the `data` folder.
