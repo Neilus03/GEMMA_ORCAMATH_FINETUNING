@@ -25,7 +25,7 @@ echo "dir: ${work_dir}"
 
 torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
     --model_name_or_path "google/gemma-7b" \
-    --data_path ./data/formatted_orcamath.json \
+    --data_path ./data/orcamath_data.json \
     --output_dir ${work_dir}/${run_name}/ \
     --run_name  ${run_name} \
     --fp16 True \
