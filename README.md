@@ -11,7 +11,7 @@ This project aims to simplify the finetuning process of large language models, s
 
 ## Installation
 Clone this repository:
-git clone https://github.com/Neilus03/LLM_EASY_FINETUNING.git
+`git clone https://github.com/Neilus03/LLM_EASY_FINETUNING.git`
 
 Install dependencies:
 `cd LLM_EASY_FINETUNING`
