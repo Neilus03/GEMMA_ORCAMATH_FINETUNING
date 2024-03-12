@@ -22,12 +22,12 @@ else:
 
 
 # Assuming 'checkpoint_path' is the path to your 'checkpoint-50010' directory
-checkpoint_path = "./weights/e10_gemma_2b_qvko_r8_a16_lr5e-5_bs12/checkpoint-50010"
+checkpoint_path = "./weights/Gemma-2b/e10_gemma_2b_qvko_r8_a16_lr5e-5_bs12/checkpoint-50010"
 
 # Load the model from the Hugging Face Hub (without the adapter head)
 pretrained_model = AutoModelForCausalLM.from_pretrained(
     "google/gemma-2b", # Load the model from the Hugging Face Hub (without the adapter head)
-    device_map="cpu", # Use the default device (GPU if available, CPU otherwise)
+    device_map="auto", # Use the default device (GPU if available, CPU otherwise)
     trust_remote_code=True, 
 )
 
@@ -45,7 +45,7 @@ finetuned_model = model.merge_and_unload().to("cuda")
 input_text = "explain exponentiation to a child in demographic terms"
 
 # Tokenize the input text and send it to the GPU
-input_ids = tokenizer(input_text, return_tensors="pt").to("cpu")
+input_ids = tokenizer(input_text, return_tensors="pt").to("cuda")
 
 # Generate the output of the pretrained model for the input text
 outputs = pretrained_model.generate(**input_ids, max_length=400, num_return_sequences=1)
