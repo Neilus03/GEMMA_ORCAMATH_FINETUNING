@@ -22,7 +22,7 @@ batch_size=4 # Decrease it if you run out of memory in CUDA (original: 16)
 
 # Training configuration for distributed setup; adjust `world_size` according to the number of GPUs.
 world_size=1 # Change it to the number of GPUs
-model="gemma-2b"
+model="gemma-2b" #Alternatively: Gemma-7b
 
 # Batch size configurations, adapted for memory limitations. Adjust as necessary.
 total_batch_size=32  # Decrease it if you run out of memory in CUDA (original: 128)
