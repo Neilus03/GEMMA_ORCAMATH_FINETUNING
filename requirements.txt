@@ -11,6 +11,7 @@ git+https://github.com/huggingface/transformers.git
 sentencepiece
 gradio
 scipy
+tqdm
 numpy
 rouge_score
 tokenizers>=0.13.3
