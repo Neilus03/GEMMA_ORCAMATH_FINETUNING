@@ -27,32 +27,34 @@ checkpoint_path = "./weights/Gemma-2b/e10_gemma_2b_qvko_r8_a16_lr5e-5_bs12/check
 # Load the model from the Hugging Face Hub (without the adapter head)
 pretrained_model = AutoModelForCausalLM.from_pretrained(
     "google/gemma-2b", # Load the model from the Hugging Face Hub (without the adapter head)
-    device_map="auto", # Use the default device (GPU if available, CPU otherwise)
+    device_map="cuda:1", # Use the default device (GPU if available, CPU otherwise)
     trust_remote_code=True, 
 )
 
 # Load the tokenizer from the local directory
-tokenizer = AutoTokenizer.from_pretrained(checkpoint_path)
-
+tokenizer_pretrained = AutoTokenizer.from_pretrained("google/gemma-2b")
+tokenizer_finetuned = AutoTokenizer.from_pretrained(checkpoint_path)
 
 # Load the adapter head from the local directory
-model = PeftModel.from_pretrained(pretrained_model, checkpoint_path)
+finetuned_model = PeftModel.from_pretrained(pretrained_model, checkpoint_path)
 
 # Merge the adapter head into the model and unload it. This will make the model ready for inference. 
-finetuned_model = model.merge_and_unload().to("cuda")
+finetuned_model = finetuned_model.merge_and_unload().to("cuda:1")
 
 # Example of inference
-input_text = "explain exponentiation to a child in demographic terms"
+input_text = "How many pairs of sides are parallel in a regular hexagon?"
 
 # Tokenize the input text and send it to the GPU
-input_ids = tokenizer(input_text, return_tensors="pt").to("cuda")
+input_ids_for_pretrained = tokenizer_pretrained(input_text, return_tensors="pt").to("cuda:1")
+input_ids_for_finetuned = tokenizer_finetuned(input_text, return_tensors="pt").to("cuda:1")
+
 
 # Generate the output of the pretrained model for the input text
-outputs = pretrained_model.generate(**input_ids, max_length=400, num_return_sequences=1)
+outputs = pretrained_model.generate(**input_ids_for_pretrained, max_length=1000, num_return_sequences=1)
 print("Pretrained model output:")
-print(tokenizer.decode(outputs[0]))
-print("--------------------------------------\n")
+print(tokenizer_pretrained.decode(outputs[0]))
+print("-----------------------------------------------------------------------------------\n")
 # Generate the output of the finetuned model for the input text
 print("Finetuned model output:")
-outputs = finetuned_model.generate(**input_ids, max_length=400, num_return_sequences=1)
-print(tokenizer.decode(outputs[0]))
+outputs = finetuned_model.generate(**input_ids_for_finetuned, max_length=1000, num_return_sequences=1)
+print(tokenizer_finetuned.decode(outputs[0]))
