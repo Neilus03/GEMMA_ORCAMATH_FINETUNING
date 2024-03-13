@@ -34,5 +34,5 @@ For detailed usage and configuration options, see the `configs` directory.
 Customize your training by modifying the configuration files in the `configs` directory. Each file corresponds to different model settings and training parameters.
 
 ## Acknowledgements
-This repo is mainly based on Huawei Lin's [LLMsEasyFinetune](https://github.com/huawei-lin/LLMsEasyFinetune/tree/master?tab=readme-ov-file).
+This repo is mainly inspired on Huawei Lin's [LLMsEasyFinetune](https://github.com/huawei-lin/LLMsEasyFinetune/tree/master?tab=readme-ov-file).
 
