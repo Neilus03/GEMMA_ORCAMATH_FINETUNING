@@ -25,14 +25,19 @@ The OrcaMath dataset as a json file ready to be trained is stored on Google Driv
 RAW data in parquet format can be found [here](https://huggingface.co/datasets/microsoft/orca-math-word-problems-200k/tree/main/data)
 
 ## Usage
+
+### Finetuning
 Run the finetuning script with:
 `./run.sh`
 
 For detailed usage and configuration options, see the `configs` directory.
 
+### Inference
+Modify prompt in the `inference.py` file's input_text variable and run `python inference.py` on the command line.
+
 ## Configuration
 Customize your training by modifying the configuration files in the `configs` directory. Each file corresponds to different model settings and training parameters.
 
 ## Acknowledgements
-This repo is mainly inspired on Huawei Lin's [LLMsEasyFinetune](https://github.com/huawei-lin/LLMsEasyFinetune/tree/master?tab=readme-ov-file).
+This repo is mainly inspired on Huawei Lin's [LLMsEasyFinetune](https://github.com/huawei-lin/LLMsEasyFinetune/tree/master?tab=readme-ov-file) which did a similar process for different hardware, dataset and model.
 
