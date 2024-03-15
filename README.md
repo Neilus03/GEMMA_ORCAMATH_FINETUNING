@@ -30,7 +30,7 @@ RAW data in parquet format can be found [here](https://huggingface.co/datasets/m
 Run the finetuning script with:
 `./run.sh`
 
-For detailed usage and configuration options, see the `configs` directory.
+For detailed usage and configuration options, see the `configs` directory and `run.sh` file.
 
 ### Inference
 Modify prompt in the `inference.py` file's `input_text` variable and run `python inference.py` on the command line.
