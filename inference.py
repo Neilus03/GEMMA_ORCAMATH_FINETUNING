@@ -32,7 +32,6 @@ pretrained_model = AutoModelForCausalLM.from_pretrained(
 )
 
 # Load the tokenizer from the local directory
-tokenizer_pretrained = AutoTokenizer.from_pretrained("google/gemma-2b")
 tokenizer_finetuned = AutoTokenizer.from_pretrained(checkpoint_path)
 
 # Load the adapter head from the local directory
@@ -45,15 +44,9 @@ finetuned_model = finetuned_model.merge_and_unload().to("cuda:1")
 input_text = "How many pairs of sides are parallel in a regular hexagon?"
 
 # Tokenize the input text and send it to the GPU
-input_ids_for_pretrained = tokenizer_pretrained(input_text, return_tensors="pt").to("cuda:1")
+
 input_ids_for_finetuned = tokenizer_finetuned(input_text, return_tensors="pt").to("cuda:1")
 
-
-# Generate the output of the pretrained model for the input text
-outputs = pretrained_model.generate(**input_ids_for_pretrained, max_length=1000, num_return_sequences=1)
-print("Pretrained model output:")
-print(tokenizer_pretrained.decode(outputs[0]))
-print("-----------------------------------------------------------------------------------\n")
 # Generate the output of the finetuned model for the input text
 print("Finetuned model output:")
 outputs = finetuned_model.generate(**input_ids_for_finetuned, max_length=1000, num_return_sequences=1)
