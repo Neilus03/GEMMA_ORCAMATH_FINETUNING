@@ -1,6 +1,6 @@
 # Gemma Finetuning with OrcaMath dataset
 <p align="left">
-  <img src="https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING/assets/87651732/0beadfe5-b996-4cc4-8f5d-fb17756ebd8b" alt="First Image" width="400"/>
+  <img src="https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING/assets/87651732/0beadfe5-b996-4cc4-8f5d-fb17756ebd8b" alt="First Image" width="400" height="220"/>
   <img src="https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING/assets/87651732/727eca80-b98d-4780-a4f8-b953e80d7ff4" alt="Second Image" width="400"/>
 </p>
 
