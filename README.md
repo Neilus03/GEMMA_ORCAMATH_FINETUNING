@@ -33,7 +33,7 @@ Run the finetuning script with:
 For detailed usage and configuration options, see the `configs` directory.
 
 ### Inference
-Modify prompt in the `inference.py` file's input_text variable and run `python inference.py` on the command line.
+Modify prompt in the `inference.py` file's `input_text` variable and run `python inference.py` on the command line.
 
 ## Configuration
 Customize your training by modifying the configuration files in the `configs` directory. Each file corresponds to different model settings and training parameters.
