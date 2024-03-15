@@ -16,8 +16,11 @@ Clone this repository:
 
 Install dependencies:
 ```bash
-cd GEMMA_ORCAMATH_FINETUNING pip install -r requirements.txt
-````
+cd GEMMA_ORCAMATH_FINETUNING 
+```
+```bash
+pip install -r requirements.txt
+```
 
 ## Dataset
 The OrcaMath dataset as a json file ready to be trained is stored on Google Drive due to its size. Download it from [orcamath_data](https://drive.google.com/file/d/1JHDUPlG5igZ1QZ0McNYmUKzixV9pJXIZ/view?usp=sharing) and place it in the `data` folder, substituting the `placeholder.json` file
