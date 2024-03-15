@@ -1,7 +1,10 @@
 # Gemma Finetuning with OrcaMath dataset
- 
+![download](https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING/assets/87651732/90223acd-9f92-44ea-bdb9-812267de8197)
+![Screenshot from 2024-03-15 09-01-43](https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING/assets/87651732/727eca80-b98d-4780-a4f8-b953e80d7ff4)
+
 ## Introduction
 This project aims to simplify the finetuning process of large language models, specifically Gemma-7b and Gemma-2b, using the OrcaMath dataset. The focus is on enhancing model performance for mathematical reasoning tasks.
+
 
 ## Requirements
 - Python 3.8+
