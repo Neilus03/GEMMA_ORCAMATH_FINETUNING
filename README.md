@@ -20,7 +20,7 @@ cd GEMMA_ORCAMATH_FINETUNING pip install -r requirements.txt
 ````
 
 ## Dataset
-The OrcaMath dataset as a json file ready to be trained is stored on Google Drive due to its size. Download it from [orcamath_data](https://drive.google.com/file/d/1JHDUPlG5igZ1QZ0McNYmUKzixV9pJXIZ/view?usp=sharing) and place it in the `data` folder, substituting it by the `placeholder.json` file
+The OrcaMath dataset as a json file ready to be trained is stored on Google Drive due to its size. Download it from [orcamath_data](https://drive.google.com/file/d/1JHDUPlG5igZ1QZ0McNYmUKzixV9pJXIZ/view?usp=sharing) and place it in the `data` folder, substituting the `placeholder.json` file
 
 RAW data in parquet format can be found [here](https://huggingface.co/datasets/microsoft/orca-math-word-problems-200k/tree/main/data)
 
