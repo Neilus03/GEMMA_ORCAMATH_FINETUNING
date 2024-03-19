@@ -25,7 +25,7 @@ from torch.utils.data import Dataset  # Base class for representing a dataset in
 from transformers import Trainer, BitsAndBytesConfig  # Classes for model training and 8-bit optimization configuration.
 from pathlib import Path # Object-oriented interface to file system paths.
 from transformers import PreTrainedTokenizer, PreTrainedModel  # Base classes for tokenizers and models.
-
+from safetensors.torch import load_file # SafeTensors version of torch.load
 
 # Constant representing the value to ignore when calculating the loss function.
 IGNORE_INDEX = -100
@@ -392,9 +392,13 @@ def load_checkpoint(
     checkpoint_to_load = safetensors_checkpoint if os.path.exists(safetensors_checkpoint) else bin_checkpoint
     
     if os.path.exists(checkpoint_to_load):
-        # Load the weights from the file into a state dictionary.
-        state_dict = torch.load(checkpoint_to_load)
-        
+        if checkpoint_to_load.endswith(".safetensors"):
+            # Load SafeTensors checkpoint.
+            state_dict = load_file(checkpoint_to_load)
+        else:
+            # Load traditional .bin checkpoint.
+            state_dict = torch.load(checkpoint_to_load)
+
         # Set the model's state dictionary to the loaded state dictionary, using set_peft_model_state_dict to handle PEFT models.
         set_peft_model_state_dict(model, state_dict)
         
@@ -498,6 +502,7 @@ def train():
         # Check if the model was loaded successfully
         if loaded_model is not None:
             model = loaded_model
+            print("Finetuned model loaded successfully. Resuming training from the checkpoint.")
         else:
             print("Failed to load the checkpoint.")
 
