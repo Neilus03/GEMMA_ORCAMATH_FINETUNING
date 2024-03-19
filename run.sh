@@ -18,23 +18,25 @@ lora_alpha=$(( lora_r * 2 ))
 # Learning configurations: learning rate, number of epochs, and batch size per device.
 learning_rate="5e-5"
 num_epoch=10
-batch_size=4 # Decrease it if you run out of memory in CUDA (original: 16)
+batch_size=1 # Decrease it if you run out of memory in CUDA (original: 16)
 
 # Training configuration for distributed setup; adjust `world_size` according to the number of GPUs.
 world_size=1 # Change it to the number of GPUs
-model="gemma-2b" #Alternatively: gemma-7b
+model="gemma-7b"
 
 # Batch size configurations, adapted for memory limitations. Adjust as necessary.
-total_batch_size=32  # Decrease it if you run out of memory in CUDA (original: 128)
+total_batch_size=8  # Decrease it if you run out of memory in CUDA (original: 128)
 gradient_accumulation_steps=$(( total_batch_size / world_size / batch_size))
 total_batch_size=$(( gradient_accumulation_steps * world_size * batch_size ))
 
 # Naming convention for the training run, incorporating various parameters for easy identification.
 run_name="e${num_epoch}_${model}_qvko_r${lora_r}_a${lora_alpha}_lr${learning_rate}_bs${total_batch_size}"
 
+#Checkpoint path to resume training from a previous checkpoint.
+checkpoint_path="./weights/Gemma-7b/e10_gemma-7b_qvko_r8_a16_lr5e-5_bs8/checkpoint-25004"
 
 # Retrieves the current working directory to ensure paths are correctly set relative to the script location.
-work_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+work_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # Work dir is: 
 echo "dir: ${work_dir}"
 
 # The main command to run the training, specifying all necessary arguments for `train.py`.
@@ -44,8 +46,9 @@ echo "dir: ${work_dir}"
 torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
     --model_name_or_path "google/${model}" \
     --data_path ./data/orcamath_data.json \
-    --output_dir ${work_dir}/${run_name}/ \
+    --output_dir ${work_dir}/weights/Gemma-7b/${run_name}/ \
     --run_name  ${run_name} \
+    --resume_from_checkpoint ${checkpoint_path} \
     --fp16 True \
     --num_train_epochs ${num_epoch} \
     --per_device_train_batch_size ${batch_size} \
@@ -53,7 +56,7 @@ torchrun --nproc_per_node=${world_size} --master_port=${master_port} train.py \
     --warmup_steps 300 \
     --save_strategy "epoch" \
     --lr_scheduler_type "constant_with_warmup" \
-    --save_total_limit 10 \
+    --save_total_limit 100 \
     --learning_rate ${learning_rate} \
     --model_max_length 512 \
     --logging_steps 8 \
