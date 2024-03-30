@@ -11,7 +11,7 @@ This project aims to simplify the finetuning process of large language models, s
 ## Requirements 
 - Python 3.8+
 - PyTorch 1.8+
-- Transformers library
+- Transformers library 
 - Additional dependencies listed in `requirements.txt`
 
 ## Installation
