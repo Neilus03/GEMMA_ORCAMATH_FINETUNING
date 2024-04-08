@@ -18,7 +18,7 @@ This project aims to simplify the finetuning process of large language models, s
 Clone this repository:
 
 `git clone https://github.com/Neilus03/GEMMA_ORCAMATH_FINETUNING.git`
-
+ 
 Install dependencies:
 ```bash
 cd GEMMA_ORCAMATH_FINETUNING 
